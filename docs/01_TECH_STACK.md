@@ -1,6 +1,8 @@
 # 01 — Tech Stack: Cochabamba Sin Baches
 
 > **Documento de referencia técnica obligatoria.** Define el stack tecnológico completo con **versiones específicas**. Cualquier IA o desarrollador que instale dependencias DEBE respetar estas versiones para evitar incompatibilidades.
+>
+> **ACTUALIZADO para Expo SDK 55** (mayo 2026). Versiones verificadas contra npm registry.
 
 ---
 
@@ -14,16 +16,33 @@
 
 ---
 
-## 2. Stack global (resumen)
+## 2. Entorno de desarrollo del estudiante
+
+| Herramienta | Versión instalada |
+|---|---|
+| macOS | Big Sur 11.7.11 |
+| Git | 2.51.0 |
+| Node.js | 22.22.2 (LTS vía nvm) |
+| npm | 10.9.7 |
+| nvm | 0.39.7 |
+| Expo CLI (npx) | 55.0.27 |
+| EAS CLI | 18.9.1 |
+| Cuenta Expo | diegogmz |
+
+---
+
+## 3. Stack global (resumen)
 
 | Capa | Tecnología | Versión |
 |---|---|---|
-| App móvil | React Native + Expo | SDK 52 |
-| Lenguaje móvil | TypeScript | 5.3.x |
+| App móvil | React Native + Expo | **SDK 55** |
+| React | React | **19.x** |
+| React Native | React Native | **0.85.x** |
+| Lenguaje móvil | TypeScript | **6.x** |
 | Estado global móvil | Zustand | 4.5.x |
-| Estilos móvil | NativeWind | 4.1.x |
-| Storage local | expo-sqlite | SDK 52 compatible |
-| Mapas | react-native-maps | SDK 52 compatible |
+| Estilos móvil | NativeWind | **4.2.x** |
+| Storage local | expo-sqlite | SDK 55 compatible |
+| Mapas | react-native-maps | **1.27.x** |
 | Backend | FastAPI (Python) | 0.115.x |
 | Lenguaje backend | Python | 3.11.x |
 | ORM | SQLAlchemy | 2.0.x |
@@ -31,43 +50,47 @@
 | Cache / broker | Redis | 7.2.x |
 | Storage objetos | MinIO | RELEASE.2024-x |
 | Tareas async | Celery | 5.4.x |
-| Push notifications | Expo Notifications | SDK 52 |
-| Dashboard web (futuro) | React + Vite | 18.3.x / 5.x |
+| Push notifications | Expo Notifications | SDK 55 |
+| Dashboard web (futuro) | React + Vite | 19.x / 6.x |
 
 ---
 
-## 3. Aplicación móvil — Stack detallado
+## 4. Aplicación móvil — Stack detallado
 
-### 3.1 Core
-
-| Paquete | Versión | Propósito |
-|---|---|---|
-| `expo` | `~52.0.0` | Framework base, runtime Expo Go |
-| `react` | `18.3.1` | Librería UI |
-| `react-native` | `0.76.x` | Runtime nativo móvil |
-| `typescript` | `~5.3.3` | Lenguaje |
-| `@types/react` | `~18.3.12` | Tipos para React |
-
-### 3.2 Navegación
+### 4.1 Core
 
 | Paquete | Versión | Propósito |
 |---|---|---|
-| `expo-router` | `~4.0.0` | Navegación file-based (estándar Expo SDK 52) |
-| `react-native-screens` | `~4.4.0` | Pantallas nativas optimizadas |
-| `react-native-safe-area-context` | `4.12.0` | Manejo de safe areas (notch, navbar) |
+| `expo` | `~55.0.0` | Framework base, runtime Expo Go |
+| `react` | `^19.2.0` | Librería UI |
+| `react-native` | `0.85.x` | Runtime nativo móvil |
+| `typescript` | `~6.0.0` | Lenguaje |
+
+> **Nota SDK 55:** Expo SDK 55 usa React 19 y React Native 0.85 (New Architecture habilitada por defecto).
+
+### 4.2 Navegación
+
+| Paquete | Versión | Propósito |
+|---|---|---|
+| `expo-router` | `~55.0.0` | Navegación file-based (estándar Expo SDK 55) |
+| `react-native-screens` | `~4.24.0` | Pantallas nativas optimizadas |
+| `react-native-safe-area-context` | `~5.7.0` | Manejo de safe areas (notch, navbar) |
+| `expo-linking` | `~55.0.0` | Deep linking |
+| `react-native-gesture-handler` | `~2.31.0` | Gestos avanzados |
+| `react-native-reanimated` | `~4.3.0` | Animaciones performantes |
 
 **Decisión:** Usamos `expo-router` (no React Navigation tradicional) porque es el estándar oficial actual de Expo y es file-based como Next.js.
 
-### 3.3 Estilos
+### 4.3 Estilos
 
 | Paquete | Versión | Propósito |
 |---|---|---|
-| `nativewind` | `^4.1.20` | Tailwind CSS para React Native |
+| `nativewind` | `^4.2.3` | Tailwind CSS para React Native |
 | `tailwindcss` | `^3.4.17` | Engine de Tailwind |
 
 **Decisión:** Tailwind v3 (no v4). NativeWind 4 todavía no soporta Tailwind v4 de forma estable.
 
-### 3.4 Estado y formularios
+### 4.4 Estado y formularios
 
 | Paquete | Versión | Propósito |
 |---|---|---|
@@ -76,90 +99,91 @@
 | `zod` | `^3.24.1` | Validación de schemas (compartido con backend) |
 | `@hookform/resolvers` | `^3.9.1` | Bridge entre react-hook-form y zod |
 
-### 3.5 Networking
+### 4.5 Networking
 
 | Paquete | Versión | Propósito |
 |---|---|---|
 | `axios` | `^1.7.9` | Cliente HTTP |
 | `@tanstack/react-query` | `^5.62.0` | Cache de queries y mutations |
 
-**Decisión:** Usamos React Query además de axios porque maneja automáticamente caché, reintentos, estados loading/error y actualizaciones optimistas.
-
-### 3.6 Almacenamiento local
+### 4.6 Almacenamiento local
 
 | Paquete | Versión | Propósito |
 |---|---|---|
-| `expo-sqlite` | `~15.0.0` | Base de datos SQLite local (offline) |
-| `expo-secure-store` | `~14.0.0` | Almacenamiento seguro de tokens JWT |
-| `@react-native-async-storage/async-storage` | `1.23.1` | Storage simple key-value (preferencias) |
+| `expo-sqlite` | `~55.0.0` | Base de datos SQLite local (offline) |
+| `expo-secure-store` | `~55.0.0` | Almacenamiento seguro de tokens JWT |
+| `@react-native-async-storage/async-storage` | `~3.0.0` | Storage simple key-value (preferencias) |
 
 **Decisión clave:**
 - Tokens JWT y refresh tokens → **siempre** en `expo-secure-store` (cifrado en hardware).
 - Reportes pendientes offline → **expo-sqlite** (queries estructuradas).
 - Preferencias simples (idioma, tema) → **AsyncStorage**.
 
-### 3.7 Cámara, geolocalización y media
+### 4.7 Cámara, geolocalización y media
 
 | Paquete | Versión | Propósito |
 |---|---|---|
-| `expo-camera` | `~16.0.0` | Captura desde cámara |
-| `expo-image-picker` | `~16.0.0` | Selección desde galería |
-| `expo-location` | `~18.0.0` | Geolocalización GPS |
-| `expo-image` | `~2.0.0` | Componente de imágenes optimizado |
-| `expo-image-manipulator` | `~13.0.0` | Compresión y resize de imágenes antes de subir |
+| `expo-camera` | `~55.0.0` | Captura desde cámara |
+| `expo-image-picker` | `~55.0.0` | Selección desde galería |
+| `expo-location` | `~55.0.0` | Geolocalización GPS |
+| `expo-image` | `~55.0.0` | Componente de imágenes optimizado |
+| `expo-image-manipulator` | `~55.0.0` | Compresión y resize de imágenes antes de subir |
 
-### 3.8 Mapas
-
-| Paquete | Versión | Propósito |
-|---|---|---|
-| `react-native-maps` | `1.18.0` | Mapas nativos |
-
-**Decisión:** En Expo Go, `react-native-maps` usa el provider por defecto del sistema (Apple Maps en iOS, Google Maps en Android sin API key con limitaciones). No usamos Mapbox porque requiere Dev Client.
-
-### 3.9 Notificaciones y conectividad
+### 4.8 Mapas
 
 | Paquete | Versión | Propósito |
 |---|---|---|
-| `expo-notifications` | `~0.29.0` | Push notifications |
-| `expo-device` | `~7.0.0` | Info del dispositivo (necesario para push tokens) |
-| `@react-native-community/netinfo` | `11.4.1` | Detección de cambios de conectividad |
+| `react-native-maps` | `^1.27.0` | Mapas nativos |
 
-### 3.10 Autenticación OAuth
+### 4.9 Notificaciones y conectividad
 
 | Paquete | Versión | Propósito |
 |---|---|---|
-| `expo-auth-session` | `~6.0.0` | OAuth2 genérico (Google, Facebook, etc.) |
-| `expo-web-browser` | `~14.0.0` | Browser embebido para OAuth |
-| `expo-crypto` | `~14.0.0` | Generación de PKCE para OAuth seguro |
+| `expo-notifications` | `~55.0.0` | Push notifications |
+| `expo-device` | `~55.0.0` | Info del dispositivo (necesario para push tokens) |
+| `@react-native-community/netinfo` | `~12.0.0` | Detección de cambios de conectividad |
 
-### 3.11 Utilidades
+### 4.10 Autenticación OAuth
+
+| Paquete | Versión | Propósito |
+|---|---|---|
+| `expo-auth-session` | `~55.0.0` | OAuth2 genérico (Google, Facebook, etc.) |
+| `expo-web-browser` | `~55.0.0` | Browser embebido para OAuth |
+| `expo-crypto` | `~55.0.0` | Generación de PKCE para OAuth seguro |
+
+### 4.11 Utilidades
 
 | Paquete | Versión | Propósito |
 |---|---|---|
 | `date-fns` | `^4.1.0` | Manejo de fechas (más ligero que moment) |
-| `expo-constants` | `~17.0.0` | Acceso a variables de entorno y manifest |
-| `expo-status-bar` | `~2.0.0` | Control de status bar |
-| `expo-splash-screen` | `~0.29.0` | Splash screen nativo |
-| `react-native-gesture-handler` | `~2.20.0` | Gestos avanzados |
-| `react-native-reanimated` | `~3.16.0` | Animaciones performantes |
+| `expo-constants` | `~55.0.0` | Acceso a variables de entorno y manifest |
+| `expo-status-bar` | `~55.0.0` | Control de status bar |
+| `expo-splash-screen` | `~55.0.0` | Splash screen nativo |
+| `expo-font` | `~55.0.0` | Carga de fuentes custom |
+| `lucide-react-native` | `^1.14.0` | Iconos (Lucide) |
+| `react-native-svg` | `~15.15.0` | Renderizado SVG (requerido por Lucide) |
 
-### 3.12 Desarrollo (devDependencies)
+### 4.12 Fuentes
+
+| Paquete | Versión | Propósito |
+|---|---|---|
+| `@expo-google-fonts/poppins` | `^0.4.1` | Fuente Poppins |
+
+### 4.13 Desarrollo (devDependencies)
 
 | Paquete | Versión | Propósito |
 |---|---|---|
 | `@babel/core` | `^7.25.0` | Transpilador |
-| `eslint` | `^9.17.0` | Linter |
-| `eslint-config-expo` | `~8.0.1` | Reglas ESLint para Expo |
 | `prettier` | `^3.4.2` | Formateo de código |
 | `prettier-plugin-tailwindcss` | `^0.6.9` | Ordenado automático de clases Tailwind |
 
 ---
 
-## 4. Backend — Stack detallado
+## 5. Backend — Stack detallado
 
 > **Nota:** El backend no es alcance de esta fase pero se documenta para que la app tenga referencia clara del contrato.
 
-### 4.1 Core
+### 5.1 Core
 
 | Paquete | Versión | Propósito |
 |---|---|---|
@@ -169,7 +193,7 @@
 | `pydantic` | `^2.10.0` | Validación de schemas |
 | `pydantic-settings` | `^2.7.0` | Configuración por env vars |
 
-### 4.2 Base de datos
+### 5.2 Base de datos
 
 | Paquete | Versión | Propósito |
 |---|---|---|
@@ -179,7 +203,7 @@
 | `asyncpg` | `^0.30.0` | Driver async PostgreSQL |
 | `psycopg2-binary` | `^2.9.10` | Driver sync (para Alembic) |
 
-### 4.3 Autenticación
+### 5.3 Autenticación
 
 | Paquete | Versión | Propósito |
 |---|---|---|
@@ -187,7 +211,7 @@
 | `passlib[bcrypt]` | `^1.7.4` | Hashing de contraseñas |
 | `python-multipart` | `^0.0.20` | Form data y file uploads |
 
-### 4.4 Tareas async y storage
+### 5.4 Tareas async y storage
 
 | Paquete | Versión | Propósito |
 |---|---|---|
@@ -195,26 +219,26 @@
 | `redis` | `^5.2.1` | Cliente Redis |
 | `minio` | `^7.2.10` | Cliente MinIO (S3) |
 
-### 4.5 Notificaciones
+### 5.5 Notificaciones
 
 | Paquete | Versión | Propósito |
 |---|---|---|
 | `httpx` | `^0.28.0` | Cliente HTTP async (para llamar Expo Push API) |
 | `exponent-server-sdk` | `^2.1.0` | SDK oficial Expo Push |
 
-### 4.6 Desarrollo backend
+### 5.6 Desarrollo backend
 
 | Paquete | Versión | Propósito |
 |---|---|---|
 | `pytest` | `^8.3.0` | Testing |
 | `pytest-asyncio` | `^0.25.0` | Tests async |
 | `httpx` | `^0.28.0` | Cliente para tests |
-| `ruff` | `^0.8.0` | Linter + formatter (reemplaza black + flake8) |
+| `ruff` | `^0.8.0` | Linter + formatter |
 | `mypy` | `^1.13.0` | Type checking |
 
 ---
 
-## 5. Infraestructura
+## 6. Infraestructura
 
 | Servicio | Versión / Plan |
 |---|---|
@@ -230,7 +254,7 @@
 
 ---
 
-## 6. Versionado del proyecto
+## 7. Versionado del proyecto
 
 - **Convención de versiones**: [Semantic Versioning 2.0](https://semver.org/) (`MAJOR.MINOR.PATCH`).
 - **Versión inicial del MVP**: `0.1.0`.
@@ -239,7 +263,7 @@
 
 ---
 
-## 7. Reglas de actualización de dependencias
+## 8. Reglas de actualización de dependencias
 
 1. **Nunca actualizar versiones MAJOR** durante el desarrollo del MVP.
 2. Las actualizaciones MINOR y PATCH se evalúan caso por caso.
@@ -249,7 +273,7 @@
 
 ---
 
-## 8. Lockfiles obligatorios
+## 9. Lockfiles obligatorios
 
 - `mobile/package-lock.json` → **debe versionarse en Git**.
 - `backend/requirements.lock` o `backend/poetry.lock` → **debe versionarse en Git**.
@@ -258,7 +282,7 @@ Sin lockfiles, no hay reproducibilidad. La IA debe respetar los lockfiles existe
 
 ---
 
-## 9. Variables de entorno (referencia)
+## 10. Variables de entorno (referencia)
 
 Todas las claves sensibles van en archivos `.env` que **NO se versionan**. Existirán archivos `.env.example` que sí se versionan, sin valores reales.
 
@@ -287,7 +311,7 @@ GOOGLE_OAUTH_CLIENT_SECRET=...
 
 ---
 
-## 10. Decisiones técnicas explícitas (y por qué NO usamos otras alternativas)
+## 11. Decisiones técnicas explícitas (y por qué NO usamos otras alternativas)
 
 | Decisión | Por qué SÍ | Por qué NO la alternativa |
 |---|---|---|
@@ -295,7 +319,7 @@ GOOGLE_OAUTH_CLIENT_SECRET=...
 | **Expo Go** sobre Dev Client | Más simple, sin Android Studio | Dev Client necesita compilación nativa |
 | **NativeWind** sobre StyleSheet | Consistente con dashboard React | StyleSheet más verboso, menos reutilizable |
 | **Zustand** sobre Redux Toolkit | Menos boilerplate, ideal para alcance MVP | Redux Toolkit es overkill aquí |
-| **expo-router** sobre React Navigation | Estándar oficial Expo SDK 52+ | React Navigation requiere config manual |
+| **expo-router** sobre React Navigation | Estándar oficial Expo SDK 55 | React Navigation requiere config manual |
 | **expo-sqlite** sobre WatermelonDB | Sin dependencias nativas extras | WatermelonDB requiere Dev Client |
 | **react-native-maps** sobre Mapbox | Funciona en Expo Go sin API key | Mapbox requiere Dev Client |
 | **Expo Notifications** sobre Firebase Messaging directo | Funciona en Expo Go | FCM directo requiere Dev Client |
@@ -305,7 +329,16 @@ GOOGLE_OAUTH_CLIENT_SECRET=...
 
 ---
 
-## 11. Documentos relacionados
+## 12. Notas sobre compatibilidad con macOS Big Sur 11.7
+
+- macOS Big Sur 11.7 es el mínimo soportado por las herramientas instaladas.
+- Node 22 LTS funciona correctamente en Big Sur.
+- Expo Go en Android no depende de la versión de macOS.
+- Si en algún momento se necesita build local (EAS Build local), puede requerir macOS más reciente. Para este proyecto usamos EAS Build en la nube, que no tiene esta limitación.
+
+---
+
+## 13. Documentos relacionados
 
 - `00_PROJECT_BRIEF.md` — Contexto del proyecto.
 - `02_DESIGN_SYSTEM.md` — Paleta y componentes visuales.
@@ -315,6 +348,6 @@ GOOGLE_OAUTH_CLIENT_SECRET=...
 
 ---
 
-**Versión:** 1.0
+**Versión:** 2.0
 **Fecha:** Mayo 2026
-**Estado:** Aprobado — versiones congeladas para inicio de desarrollo
+**Estado:** Aprobado — versiones actualizadas a Expo SDK 55, congeladas para desarrollo

@@ -1,15 +1,23 @@
 # 11 — Project Initialization: Cochabamba Sin Baches
 
 > **Documento ejecutable.** Contiene los comandos exactos para crear el proyecto Expo, instalar todas las dependencias, configurar NativeWind, Zustand, React Query, y dejar el proyecto listo para empezar a codear pantallas. Ejecutar en orden, sin saltarse ningún paso.
+>
+> **ACTUALIZADO para Expo SDK 55** (mayo 2026).
 
 ---
 
 ## Requisitos previos
 
 - `10_SETUP_ENVIRONMENT.md` completado exitosamente.
-- Node.js LTS, npm, Expo CLI funcionando.
+- Node.js 22.x, npm 10.x, Expo CLI 55.x funcionando.
 - Repositorio `cochabamba-sin-baches` clonado en la máquina.
 - Terminal abierta en la raíz del repositorio.
+
+---
+
+## Nota importante sobre versiones
+
+Con Expo SDK 55, el comando `npx expo install` automáticamente instala la versión compatible de cada paquete de Expo. **NO forzar versiones manualmente** para paquetes del SDK de Expo. Para paquetes de terceros (axios, zustand, etc.) SÍ se instalan con `npm install` y las versiones del `01_TECH_STACK.md`.
 
 ---
 
@@ -21,7 +29,7 @@ Desde la raíz del repositorio (`cochabamba-sin-baches/`):
 npx create-expo-app@latest mobile --template blank-typescript
 ```
 
-**Qué hace:** Crea una carpeta `mobile/` dentro del repo con un proyecto Expo en blanco usando TypeScript.
+**Qué hace:** Crea una carpeta `mobile/` dentro del repo con un proyecto Expo SDK 55 en blanco usando TypeScript.
 
 **Resultado esperado:** Carpeta `mobile/` creada con `package.json`, `tsconfig.json`, `app.json`, etc.
 
@@ -40,7 +48,7 @@ cd mobile
 npx expo start
 ```
 
-Escanear el QR code con Expo Go en tu teléfono Android. Debe aparecer una pantalla blanca con texto "Open up App.tsx to start working on your app!"
+Escanear el QR code con Expo Go en tu teléfono Android. Debe aparecer una pantalla con texto de bienvenida.
 
 **Presionar `Ctrl+C` para detener el servidor después de verificar.**
 
@@ -48,7 +56,7 @@ Si funciona, hacer commit del proyecto base:
 ```bash
 cd ..
 git add mobile/
-git commit -m "feat: initialize expo project with blank-typescript template"
+git commit -m "feat: initialize expo project with blank-typescript template (SDK 55)"
 git push
 cd mobile
 ```
@@ -60,6 +68,8 @@ cd mobile
 ```bash
 npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar react-native-gesture-handler react-native-reanimated
 ```
+
+> `npx expo install` selecciona automáticamente las versiones compatibles con SDK 55.
 
 ### 3.1 Configurar expo-router en package.json
 
@@ -219,7 +229,7 @@ El flag `-c` limpia la caché. En Expo Go debe aparecer pantalla negra con texto
 ### 4.1 Instalar dependencias
 
 ```bash
-npx expo install nativewind tailwindcss@3.4.17
+npx expo install nativewind@^4.2.3 tailwindcss@3.4.17
 ```
 
 ### 4.2 Crear archivo tailwind.config.js
@@ -480,7 +490,7 @@ export default function IndexScreen() {
 npx expo start -c
 ```
 
-**Verificar:** El texto se ve con tipografía Poppins (geométrica, redondeada), no con la fuente del sistema. La diferencia es visible especialmente en la "a" y la "e".
+**Verificar:** El texto se ve con tipografía Poppins (geométrica, redondeada), no con la fuente del sistema.
 
 **Presionar `Ctrl+C` para detener.**
 
@@ -489,7 +499,7 @@ npx expo start -c
 ## Paso 6: Instalar dependencias de estado y networking
 
 ```bash
-npm install zustand @tanstack/react-query axios
+npm install zustand@^4.5.5 @tanstack/react-query@^5.62.0 axios@^1.7.9
 ```
 
 ### 6.1 Crear configuración de React Query
@@ -509,8 +519,8 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 2,
-      staleTime: 1000 * 60 * 5, // 5 minutos
-      gcTime: 1000 * 60 * 30, // 30 minutos (antes cacheTime)
+      staleTime: 1000 * 60 * 5,
+      gcTime: 1000 * 60 * 30,
     },
     mutations: {
       retry: 1,
@@ -645,7 +655,7 @@ npx expo install expo-auth-session expo-web-browser expo-crypto
 ## Paso 12: Instalar dependencias de formularios y validación
 
 ```bash
-npm install react-hook-form zod @hookform/resolvers
+npm install react-hook-form@^7.54.0 zod@^3.24.1 @hookform/resolvers@^3.9.1
 ```
 
 ---
@@ -653,7 +663,8 @@ npm install react-hook-form zod @hookform/resolvers
 ## Paso 13: Instalar dependencias de utilidades
 
 ```bash
-npx expo install date-fns lucide-react-native react-native-svg
+npm install date-fns@^4.1.0
+npx expo install lucide-react-native react-native-svg
 ```
 
 ---
@@ -661,7 +672,7 @@ npx expo install date-fns lucide-react-native react-native-svg
 ## Paso 14: Instalar dependencias de desarrollo
 
 ```bash
-npm install -D prettier prettier-plugin-tailwindcss
+npm install -D prettier@^3.4.2 prettier-plugin-tailwindcss@^0.6.9
 ```
 
 ### 14.1 Crear configuración de Prettier
@@ -762,7 +773,7 @@ npx expo-doctor
 ```bash
 cd ..
 git add mobile/
-git commit -m "feat: complete expo project setup with nativewind, poppins, react-query, and all dependencies"
+git commit -m "feat: complete expo project setup (SDK 55) with nativewind, poppins, react-query, and all dependencies"
 git push
 cd mobile
 ```
@@ -771,35 +782,17 @@ cd mobile
 
 ## Resumen de dependencias instaladas
 
-### Dependencies (producción)
+### Instaladas con `npx expo install` (versiones automáticas SDK 55)
 
-| Categoría | Paquetes |
-|---|---|
-| **Core** | `expo`, `react`, `react-native`, `expo-router` |
-| **Navegación** | `react-native-screens`, `react-native-safe-area-context`, `expo-linking`, `react-native-gesture-handler`, `react-native-reanimated` |
-| **Estilos** | `nativewind`, `tailwindcss` |
-| **Estado** | `zustand` |
-| **Networking** | `axios`, `@tanstack/react-query` |
-| **Formularios** | `react-hook-form`, `zod`, `@hookform/resolvers` |
-| **Storage** | `expo-sqlite`, `expo-secure-store`, `@react-native-async-storage/async-storage` |
-| **Cámara/Media** | `expo-camera`, `expo-image-picker`, `expo-image`, `expo-image-manipulator` |
-| **Ubicación** | `expo-location` |
-| **Mapas** | `react-native-maps` |
-| **Notificaciones** | `expo-notifications`, `expo-device` |
-| **Conectividad** | `@react-native-community/netinfo` |
-| **OAuth** | `expo-auth-session`, `expo-web-browser`, `expo-crypto` |
-| **Iconos** | `lucide-react-native`, `react-native-svg` |
-| **Utilidades** | `date-fns`, `expo-constants`, `expo-status-bar`, `expo-splash-screen`, `expo-font` |
-| **Fuentes** | `@expo-google-fonts/poppins` |
+expo-router, react-native-screens, react-native-safe-area-context, expo-linking, expo-constants, expo-status-bar, react-native-gesture-handler, react-native-reanimated, expo-font, expo-splash-screen, expo-sqlite, expo-secure-store, @react-native-async-storage/async-storage, expo-camera, expo-image-picker, expo-location, expo-image, expo-image-manipulator, react-native-maps, expo-notifications, expo-device, @react-native-community/netinfo, expo-auth-session, expo-web-browser, expo-crypto, lucide-react-native, react-native-svg, @expo-google-fonts/poppins
 
-### DevDependencies (desarrollo)
+### Instaladas con `npm install` (versiones fijas)
 
-| Paquete | Propósito |
-|---|---|
-| `typescript` | Lenguaje |
-| `@babel/core` | Transpilación |
-| `prettier` | Formateo |
-| `prettier-plugin-tailwindcss` | Orden de clases Tailwind |
+nativewind@^4.2.3, tailwindcss@3.4.17, zustand@^4.5.5, @tanstack/react-query@^5.62.0, axios@^1.7.9, react-hook-form@^7.54.0, zod@^3.24.1, @hookform/resolvers@^3.9.1, date-fns@^4.1.0
+
+### DevDependencies
+
+prettier@^3.4.2, prettier-plugin-tailwindcss@^0.6.9
 
 ---
 
@@ -831,6 +824,6 @@ Proceder a `12_FOLDER_STRUCTURE.md` para crear toda la estructura de carpetas y 
 
 ---
 
-**Versión:** 1.0
+**Versión:** 2.0
 **Fecha:** Mayo 2026
-**Estado:** Listo para ejecución
+**Estado:** Listo para ejecución — actualizado a Expo SDK 55
