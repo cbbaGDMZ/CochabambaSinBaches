@@ -236,9 +236,6 @@ npm --version
 echo "=== nvm ==="
 nvm --version
 
-echo "=== Watchman ==="
-watchman --version
-
 echo "=== Expo ==="
 npx expo --version
 
@@ -247,6 +244,9 @@ eas --version
 
 echo "=== Expo Login ==="
 npx expo whoami
+
+echo "=== Watchman ==="
+watchman --version
 ```
 
 **Resultado esperado:** Todos muestran una versión, ninguno dice "command not found" o da error.
