@@ -6,7 +6,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { reportService } from '@/services/report-service';
 import { useReportStore } from '@/stores/report-store';
 import { useOfflineStore } from '@/stores/offline-store';
-import type { CreateReportPayload, Report } from '@/types/report-types';
+import type {
+  CreateReportPayload,
+  Report,
+  ReportListResponse,
+} from '@/types/report-types';
 
 export const REPORT_QUERY_KEYS = {
   all: ['reports'] as const,
@@ -18,14 +22,9 @@ export const REPORT_QUERY_KEYS = {
 };
 
 export const useMyReports = (page: number = 1) => {
-  const { setMyReports } = useReportStore();
-
-  return useQuery({
+  return useQuery<ReportListResponse>({
     queryKey: REPORT_QUERY_KEYS.myReports(page),
     queryFn: () => reportService.getMyReports(page),
-    onSuccess: (data) => {
-      setMyReports(data.reports);
-    },
   });
 };
 
@@ -34,15 +33,10 @@ export const useNearbyReports = (
   longitude: number,
   radiusKm?: number,
 ) => {
-  const { setNearbyReports } = useReportStore();
-
-  return useQuery({
+  return useQuery<Report[]>({
     queryKey: REPORT_QUERY_KEYS.nearbyReports(latitude, longitude),
     queryFn: () =>
       reportService.getNearbyReports(latitude, longitude, radiusKm),
-    onSuccess: (data) => {
-      setNearbyReports(data);
-    },
   });
 };
 
@@ -65,8 +59,7 @@ export const useCreateReport = () => {
       addMyReport(report);
       queryClient.invalidateQueries({ queryKey: REPORT_QUERY_KEYS.all });
     },
-    onError: (error, payload) => {
-      // Si falla, agregar a pendientes para sincronizar después
+    onError: () => {
       addPendingReport(`pending-${Date.now()}`);
     },
   });
