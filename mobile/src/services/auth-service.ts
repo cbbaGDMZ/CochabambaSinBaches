@@ -7,6 +7,7 @@ import type {
   LoginPayload,
   LoginResponse,
   RegisterPayload,
+  GoogleAuthPayload,
   User,
 } from '@/types/user-types';
 
@@ -18,6 +19,16 @@ export const authService = {
 
   register: async (payload: RegisterPayload): Promise<LoginResponse> => {
     const { data } = await apiClient.post('/auth/register', payload);
+    return data;
+  },
+
+  loginWithGoogle: async (payload: GoogleAuthPayload): Promise<LoginResponse> => {
+    const { data } = await apiClient.post('/auth/google', payload);
+    return data;
+  },
+
+  getProfile: async (): Promise<User> => {
+    const { data } = await apiClient.get('/auth/me');
     return data;
   },
 
